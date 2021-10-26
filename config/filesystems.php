@@ -53,6 +53,11 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
         ],
 
+        'publications' => [
+            'driver' => 'local',
+            'root' => public_path('images/publication'),
+            'url' => env('APP_URL').'/images/publication',
+        ]
     ],
 
     /*
