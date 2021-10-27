@@ -59,6 +59,11 @@
                         </div>
                         <br>
                         <div class="p-6">
+                            <a href="{{ route('liker', $publication->id) }}">like</a>: {{ $publication->likes->count() }}
+                            <a href="{{ route('disliker', $publication->id) }}">dislike</a>: {{ $publication->dislikes->count() }}
+                        </div>
+                        <br>
+                        <div class="p-6">
                             <b>{{ $publication->author->name }} </b>{{ $publication->description }}
                         </div>
                     </div>
@@ -68,3 +73,24 @@
         </div>
     </body>
 </html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+{{--<script type="text/javascript">--}}
+{{--    $(function () {--}}
+{{--        $('#liker_disliker').submit(function (e) {--}}
+{{--            e.preventDefault();--}}
+
+{{--            var data = $(this).serialize();--}}
+
+{{--            $.ajax({--}}
+{{--                type: "POST",--}}
+{{--                url: '/',--}}
+{{--                data: data,--}}
+{{--                success: function (result) {--}}
+{{--                    $('#like').html(result);--}}
+{{--                }--}}
+{{--            })--}}
+{{--        });--}}
+{{--    });--}}
+{{--</script>--}}

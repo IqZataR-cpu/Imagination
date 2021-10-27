@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [\App\Http\Controllers\PublicationController::class, 'welcome'])->name('welcome');
+Route::get('/{publication}/like', [\App\Http\Controllers\PublicationController::class, 'liker'])->name('liker');
+Route::get('/{publication}/dislike', [\App\Http\Controllers\PublicationController::class, 'disliker'])->name('disliker');
 
 Route::group(['middleware' => 'auth', 'prefix' => 'personal'], function () {
     Route::post('/', [\App\Http\Controllers\PublicationController::class, 'store'])->name('publication.store');

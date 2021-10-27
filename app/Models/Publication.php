@@ -29,4 +29,14 @@ class Publication extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class, 'publication_id');
+    }
+
+    public function dislikes()
+    {
+        return $this->hasMany(Dislike::class, 'publication_id');
+    }
 }
