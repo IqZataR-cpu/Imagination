@@ -14,12 +14,14 @@
             </div>
             <br>
             <div class="p-6">
-                <b>Сменить пароль</b>
+                <b>Сменить данные</b>
                 <br>
-                <form action="{{ 'presonal.edit' }}" method="post" enctype='multipart/form-data'>
+                <form action="{{ route('personal.index') }}" method="post" enctype='multipart/form-data'>
                     @csrf
-                    <input type="text" name="password" id="password" placeholder="Пароль"> <br>
-                    <input type="text" name="password_confirmation" id="password_confirmation" placeholder="Повторите пароль"> <br>
+                    <input type="email" name="email" id="email" placeholder="Почта"> <br>
+                    <input type="text" name="name" id="name" placeholder="Имя"> <br>
+                    <input type="password" name="password" id="password" placeholder="Пароль"> <br>
+                    <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Повторите пароль"> <br>
                     <input type="submit" name="ready">
                 </form>
             </div>

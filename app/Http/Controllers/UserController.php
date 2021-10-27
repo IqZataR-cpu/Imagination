@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserPasswordRequests;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -13,8 +14,29 @@ class UserController extends Controller
         return view('personal.show', ['User' => \Auth::user()]);
     }
 
-    public function editPassword(User $user, UserPasswordRequests $requests)
+    public function editPassword(Request $request)
     {
+        $user = \Auth::user();
+        if (isset($request->name)) {
+            $user->name = $request->name;
+        }
 
+        if (isset($request->email)) {
+            $user->email = $request->email;
+        }
+
+        if (isset($request->password) & isset($request->password_confirmation))  {
+            if ($request->password == $request->password_confirmation) {
+            $user->password = bcrypt($request->password);
+
+            $user->save();
+
+            return redirect('/')->with(Auth::logout());
+            }
+        }
+
+        $user->save();
+
+        return redirect()->route('personal.index');
     }
 }
