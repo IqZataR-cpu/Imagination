@@ -39,4 +39,16 @@ class Publication extends Model
     {
         return $this->hasMany(Dislike::class, 'publication_id');
     }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function lastComments()
+    {
+        return $this->comments()
+            ->orderByDesc('created_at')
+            ->limit(3)->get();
+    }
 }

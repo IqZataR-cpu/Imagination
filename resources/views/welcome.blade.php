@@ -18,12 +18,86 @@
             body {
                 font-family: 'Nunito', sans-serif;
             }
-
+            .content-box{
+                height: 43px;
+                width: 488px;
+                margin: 0;
+                padding: 0;
+            }
+            .content-box-header{
+                width: 488px;
+                height: 52px;
+                display: flex;
+                align-items: center
+            }
+            .content-box-header div {
+                margin-left: 25px;
+            }
+            .content-box-images{
+                width: 488px;
+                height: auto;
+                align-items: center;
+                margin: 0;
+                padding: 0;
+            }
+            .content-box-more{
+                width: 488px;
+                height: auto;
+                margin: 0;
+                padding: 0;
+            }
+            .content-box-actions {
+                width: 488px;
+                height: 52px;
+                margin: 0;
+                padding: 25px;
+                display: inline-flex;
+                align-items: center
+            }
+            #dislike {
+                margin-top: 10px;
+                margin-left: 10px;
+            }
+            #chat {
+                margin-top: 5px;
+                margin-left: 10px;
+            }
+            .content-box-description {
+                margin: 0;
+                padding: 25px;
+            }
+            .comments-box {
+                margin: 0;
+                padding: 25px;
+                width: 488px;
+            }
+            .content-box-form {
+                width: 488px;
+                margin-bottom: 10px;
+            }
+            .content-box-form form {
+                display: inline-flex;
+                margin-left: 19px;
+            }
+            input[type=text] {
+                height: 43px;
+                width: 331px;
+                padding: 12px 20px;
+                margin: 8px 0;
+                box-sizing: border-box;
+            }
+            input[type=submit] {
+                height: 100%;
+                width: 117px;
+                background-color: white;
+                box-sizing: border-box;
+                color: lightseagreen;
+            }
             img {
-                max-height: 750px;
-                max-width: 600px;
-                width: expression(document.body.clientWidth > 600? “600px”: “auto”);
-                height: expression(document.body.clientHeight > 750? “750px”: “auto”);
+                max-height: 614px;
+                max-width: 488px;
+                width: expression(document.body.clientWidth > 488? “488px”: “auto”);
+                height: expression(document.body.clientHeight > 614? “614px”: “auto”);
             }
         </style>
     </head>
@@ -46,26 +120,64 @@
                 </div>
             @endif
 
-            <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+            <div class="content-box">
                 @foreach($publications as $publication)
                 <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
-                    <div class="grid grid-cols-1 md:grid-cols-2">
-                        <div class="p-6">
-                            {{ $publication->author->name }} {{ $publication->created_at->format('d-m-Y') }}
+                    <div class="">
+                        <div class="content-box-header">
+                           <div> <b>{{ $publication->author->name }}</b> от {{ $publication->created_at->format('d-m-Y') }} </div>
                         </div>
                         <br>
-                        <div class="p-6">
+                        <div class="content-box-images">
                             <img src="{{ asset('images/publication/' . $publication->previewImage->path) }}" alt="">
                         </div>
                         <br>
-                        <div class="p-6">
-                            <a href="{{ route('liker', $publication->id) }}">like</a>: {{ $publication->likes->count() }}
-                            <a href="{{ route('disliker', $publication->id) }}">dislike</a>: {{ $publication->dislikes->count() }}
+                        <div class="content-box-more">
+                            <div class="content-box-actions">
+                                <div>
+                                    <a href="{{ route('liker', $publication->id) }}">
+                                        <img id="like" src="{{ asset('images/like.png') }}" alt="">
+                                    </a>
+                                </div>
+                                <div>
+                                    {{ $publication->likes->count() }}
+                                </div>
+                                <div>
+                                <a href="{{ route('disliker', $publication->id) }}">
+                                    <img id="dislike" src="{{ asset('images/dislike.png') }}" alt="">
+                                </a>
+                                </div>
+                                <div>
+                                    {{ $publication->dislikes->count() }}
+                                </div>
+                                <div>
+                                    <a href="">
+                                        <img id="chat" src="{{ asset('images/chat.png') }}" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="content-box-description">
+                                Описание: <br>
+                                <b>{{ $publication->author->name }} </b>{{ $publication->description }}
+                            </div>
+                            <div class="comments-box">
+                                <b>Комментарии: {{ $publication->comments->count() }}<br></b>
+                                <div class="comments-box-comment">
+                                    @foreach($publication->lastComments() as $comment)
+                                        {{$comment->author->name}}: {{ $comment->body }} <br>
+                                    @endforeach
+                                </div>
+
+                            </div>
+                            <div class="content-box-form" >
+                                <form action="{{ route('comment.create', $publication) }}" method="POST">
+                                    @csrf
+                                    <div><input type="text" name="body" placeholder="Добавьте комментарий...."></div>
+                                    <div><input type="submit" name="submit" value="Опубликовать"></div>
+                                </form>
+                            </div>
                         </div>
                         <br>
-                        <div class="p-6">
-                            <b>{{ $publication->author->name }} </b>{{ $publication->description }}
-                        </div>
                     </div>
                 </div>
                 @endforeach

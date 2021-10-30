@@ -27,7 +27,7 @@ class PublicationController extends Controller
     public function welcome()
     {
 //        ->random(2)
-        $publications = Publication::all();
+        $publications = Publication::with('comments', 'author', 'previewImage', 'likes', 'dislikes')->get();
 
         return view('welcome', [
             'publications' => $publications
@@ -36,8 +36,9 @@ class PublicationController extends Controller
 
     public function index()
     {
-        return view('publications.show', [
-            'publications' => Auth::user()->publications
+        return view('publications.index', [
+            'publications' => Auth::user()->publications,
+            'comment'
         ]);
     }
 
