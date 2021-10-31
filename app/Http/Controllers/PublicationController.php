@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PublicationEditRequests;
 use App\Http\Requests\PublicationStoreRequests;
 use App\Models\Publication;
-use App\Models\User;
 use App\Services\ImageService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PublicationController extends Controller
