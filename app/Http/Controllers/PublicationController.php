@@ -43,15 +43,13 @@ class PublicationController extends Controller
         $publication = new Publication($request->validated());
         $publication->save();
 
-        if ($request->hasFile('preview_image')) {
-            $image = $this->imageService->store(
-                $request->file('preview_image'),
-                $publication->id,
-                'publications'
-            );
+        $image = $this->imageService->store(
+            $request->file('preview_image'),
+            $publication->id,
+            'publications'
+        );
 
-            $publication->previewImage()->associate($image);
-        }
+        $publication->previewImage()->associate($image);
 
         $publication->author()->associate($request->user());
         $publication->save();
