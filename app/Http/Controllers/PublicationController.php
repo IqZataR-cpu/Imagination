@@ -19,7 +19,7 @@ class PublicationController extends Controller
 
     public function welcome()
     {
-        $publications = Publication::all()->random(2);
+        $publications = Publication::inRandomOrder()->get();
 
         return view('welcome', [
             'publications' => $publications
