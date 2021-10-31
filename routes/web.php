@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\PublicationController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,19 +15,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [\App\Http\Controllers\PublicationController::class, 'welcome'])->name('welcome');
-Route::get('/{publication}/like', [\App\Http\Controllers\PublicationController::class, 'liker'])->name('liker');
-Route::get('/{publication}/dislike', [\App\Http\Controllers\PublicationController::class, 'disliker'])->name('disliker');
+Route::get('/', [PublicationController::class, 'welcome'])->name('welcome');
+Route::get('/{publication}/like', [PublicationController::class, 'liker'])->name('liker');
+Route::get('/{publication}/dislike', [PublicationController::class, 'disliker'])->name('disliker');
 
 Route::group(['middleware' => 'auth', 'prefix' => 'personal'], function () {
-    Route::post('/', [\App\Http\Controllers\PublicationController::class, 'store'])->name('publication.store');
-    Route::get('/create', [\App\Http\Controllers\PublicationController::class, 'create'])->name('publication.create');
-    Route::get('/index', [\App\Http\Controllers\PublicationController::class, 'index'])->name('publication.index');
-    Route::get('/{publication}/show', [\App\Http\Controllers\PublicationController::class, 'show'])->name('publication.show');
-    Route::post('/{publication}/edit', [\App\Http\Controllers\PublicationController::class, 'edit'])->name('publication.edit');
-    Route::get('/{publication}/destroy', [\App\Http\Controllers\PublicationController::class, 'destroy'])->name('publication.destroy');
-    Route::get('/area', [\App\Http\Controllers\UserController::class, 'index'])->name('personal.index');
-    Route::post('/area', [\App\Http\Controllers\UserController::class, 'editPassword'])->name('personal.edit');
+    Route::post('/', [PublicationController::class, 'store'])->name('publication.store');
+    Route::get('/create', [PublicationController::class, 'create'])->name('publication.create');
+    Route::get('/index', [PublicationController::class, 'index'])->name('publication.index');
+    Route::get('/{publication}/show', [PublicationController::class, 'show'])->name('publication.show');
+    Route::post('/{publication}/edit', [PublicationController::class, 'edit'])->name('publication.edit');
+    Route::get('/{publication}/destroy', [PublicationController::class, 'destroy'])->name('publication.destroy');
+    Route::get('/area', [UserController::class, 'index'])->name('personal.index');
+    Route::post('/area', [UserController::class, 'update'])->name('personal.edit');
 });
 
 

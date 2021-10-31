@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PublicationStoreRequests extends FormRequest
+class UserPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class PublicationStoreRequests extends FormRequest
     public function rules()
     {
         return [
-            'description' => 'nullable|string|max:1000',
-            'preview_image' => 'required|image|max:2000',
+            'password' => 'confirmed',
         ];
     }
 }
