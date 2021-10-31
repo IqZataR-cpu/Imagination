@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-//use App\Traits\HasComments;
+use App\Traits\HasComments;
 use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-//    use HasComments;
+    use HasComments;
 
     protected $fillable = [
         'user_id',
