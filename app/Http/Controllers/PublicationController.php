@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PublicationEditRequest;
-use App\Http\Requests\PublicationStoreRequest;
 use App\Models\Dislike;
 use App\Models\Like;
+use App\Http\Requests\PublicationEditRequest;
+use App\Http\Requests\PublicationStoreRequest;
 use App\Models\Publication;
 use App\Services\ImageService;
 use App\Services\PublicationService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PublicationController extends Controller
