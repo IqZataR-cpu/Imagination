@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Model;
  * @package App\Models
  * @property integer user_id
  * @property integer publication_id
+ *
+ * fixme Убрать дизлайк, сделать просто систему отношения к публикации,
+ *  в которой будет флаг для определения лайк или дизлайк
+ *  При нажатии на кнопку просто менять лайк или нет.
  */
 class Dislike extends Model
 {
