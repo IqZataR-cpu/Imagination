@@ -13,6 +13,9 @@ class CommentController extends Controller
     {
         $user = \Auth::user();
 
+        // fixme Создать Request класс на валидацию создания комментария, убрать отсюда проверку.
+        //  перенести логику создания в CommentRepository,
+        //  в качестве объекта к которому производится комментарий передавать Model $commentable
         if (isset($request->body)) {
             $comment = new Comment();
             $comment->user_id = $user->id;
