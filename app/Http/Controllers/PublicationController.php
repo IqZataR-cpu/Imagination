@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PublicationEditRequests;
-use App\Http\Requests\PublicationStoreRequests;
+use App\Http\Requests\PublicationEditRequest;
+use App\Http\Requests\PublicationStoreRequest;
 use App\Models\Publication;
 use App\Services\ImageService;
 use Illuminate\Support\Facades\Auth;
@@ -38,14 +38,14 @@ class PublicationController extends Controller
         return view('publications.create');
     }
 
-    public function store(PublicationStoreRequests $requests)
+    public function store(PublicationStoreRequest $request)
     {
         $publication = new Publication($requests->validated());
         $publication->save();
 
-        if ($requests->hasFile('preview_image')) {
+        if ($request->hasFile('preview_image')) {
             $image = $this->imageService->store(
-                $requests->file('preview_image'),
+                $request->file('preview_image'),
                 $publication->id,
                 'publications'
             );
@@ -64,7 +64,7 @@ class PublicationController extends Controller
         ]);
     }
 
-    public function edit(Publication $publication, PublicationEditRequests $request)
+    public function edit(Publication $publication, PublicationEditRequest $request)
     {
         $publication->description = $request->description;
         $publication->save();
