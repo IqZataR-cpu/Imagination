@@ -40,7 +40,7 @@ class PublicationController extends Controller
 
     public function store(PublicationStoreRequest $request)
     {
-        $publication = new Publication($requests->validated());
+        $publication = new Publication($request->validated());
         $publication->save();
 
         if ($request->hasFile('preview_image')) {
@@ -66,7 +66,7 @@ class PublicationController extends Controller
 
     public function edit(Publication $publication, PublicationEditRequest $request)
     {
-        $publication->description = $request->description;
+        $publication->fill($request->validated());
         $publication->save();
 
         return redirect()->route('publication.index');
