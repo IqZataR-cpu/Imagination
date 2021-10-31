@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PublicationEditRequests;
-use App\Http\Requests\PublicationStoreRequests;
+use App\Http\Requests\PublicationEditRequest;
+use App\Http\Requests\PublicationStoreRequest;
 use App\Models\Dislike;
 use App\Models\Like;
 use App\Models\Publication;
-use App\Models\User;
 use App\Services\ImageService;
 use App\Services\PublicationService;
 use Illuminate\Http\Request;
@@ -26,8 +25,7 @@ class PublicationController extends Controller
 
     public function welcome()
     {
-//        ->random(2)
-        $publications = Publication::with('comments', 'author', 'previewImage', 'likes', 'dislikes')->get();
+        $publications = Publication::inRandomOrder()->get();
 
         return view('welcome', [
             'publications' => $publications
@@ -47,22 +45,21 @@ class PublicationController extends Controller
         return view('publications.create');
     }
 
-    public function store(PublicationStoreRequests $requests)
+    public function store(PublicationStoreRequest $request)
     {
-        $publication = new Publication($requests->validated());
+        $publication = new Publication($request->validated());
         $publication->save();
 
-        if ($requests->hasFile('preview_image')) {
-            $image = $this->imageService->store(
-                $requests->file('preview_image'),
-                $publication->id,
-                'publications'
-            );
+        $image = $this->imageService->store(
+            $request->file('preview_image'),
+            $publication->id,
+            'publications'
+        );
 
-            $publication->author()->associate($requests->user());
-            $publication->previewImage()->associate($image);
-            $publication->save();
-        }
+        $publication->previewImage()->associate($image);
+
+        $publication->author()->associate($request->user());
+        $publication->save();
 
         return redirect()->route('publication.index');
     }
@@ -73,9 +70,9 @@ class PublicationController extends Controller
         ]);
     }
 
-    public function edit(Publication $publication, PublicationEditRequests $request)
+    public function edit(Publication $publication, PublicationEditRequest $request)
     {
-        $publication->description = $request->description;
+        $publication->fill($request->validated());
         $publication->save();
 
         return redirect()->route('publication.index');
