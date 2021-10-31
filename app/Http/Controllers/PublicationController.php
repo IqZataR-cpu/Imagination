@@ -46,6 +46,8 @@ class PublicationController extends Controller
 
     public function store(PublicationStoreRequest $request)
     {
+        // fixme Вынести логику в Repository -> PublicationRepository, method store,
+        //  главное условие, не передавать request в метод репозитория
         $publication = new Publication($request->validated());
         $publication->save();
 
