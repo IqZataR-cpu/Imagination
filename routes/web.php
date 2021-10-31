@@ -23,7 +23,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], function () {
     Route::post('/{publication}/edit', [\App\Http\Controllers\PublicationController::class, 'edit'])->name('publication.edit');
     Route::get('/{publication}/destroy', [\App\Http\Controllers\PublicationController::class, 'destroy'])->name('publication.destroy');
     Route::get('/area', [\App\Http\Controllers\UserController::class, 'index'])->name('personal.index');
-    Route::post('/area', [\App\Http\Controllers\UserController::class, 'editPassword'])->name('personal.edit');
+    Route::post('/area', [\App\Http\Controllers\UserController::class, 'update'])->name('personal.edit');
 });
 
 

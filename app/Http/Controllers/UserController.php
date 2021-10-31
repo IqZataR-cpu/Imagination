@@ -12,9 +12,10 @@ class UserController extends Controller
         return view('personal.show', ['User' => \Auth::user()]);
     }
 
-    public function editPassword(Request $request)
+    public function update(Request $request)
     {
-        $user = \Auth::user();
+        $user = $request->user();
+
         if (isset($request->name)) {
             $user->name = $request->name;
         }
@@ -25,11 +26,11 @@ class UserController extends Controller
 
         if (isset($request->password) & isset($request->password_confirmation))  {
             if ($request->password == $request->password_confirmation) {
-            $user->password = bcrypt($request->password);
+                $user->password = bcrypt($request->password);
 
-            $user->save();
+                $user->save();
 
-            return redirect('/')->with(Auth::logout());
+                return redirect('/')->with(Auth::logout());
             }
         }
 
