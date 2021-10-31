@@ -50,10 +50,11 @@ class PublicationController extends Controller
                 'publications'
             );
 
-            $publication->author()->associate($requests->user());
             $publication->previewImage()->associate($image);
-            $publication->save();
         }
+
+        $publication->author()->associate($request->user());
+        $publication->save();
 
         return redirect()->route('publication.index');
     }
