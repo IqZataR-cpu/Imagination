@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Dislike;
-use App\Models\Like;
 use App\Http\Requests\PublicationEditRequest;
 use App\Http\Requests\PublicationStoreRequest;
 use App\Models\Publication;
+use App\Repository\PublicationRepository;
 use App\Services\ImageService;
 use App\Services\PublicationService;
 use Illuminate\Support\Facades\Auth;
@@ -15,11 +14,13 @@ class PublicationController extends Controller
 {
     private $imageService;
     private $publicationService;
+    private $publicationRepository;
 
-    public function __construct(ImageService $imageService, PublicationService $publicationService)
+    public function __construct(ImageService $imageService, PublicationService $publicationService, PublicationRepository $publicationRepository)
     {
         $this->imageService = $imageService;
         $this->publicationService = $publicationService;
+        $this->publicationRepository = $publicationRepository;
     }
 
     public function welcome()
@@ -46,10 +47,7 @@ class PublicationController extends Controller
 
     public function store(PublicationStoreRequest $request)
     {
-        // fixme Вынести логику в Repository -> PublicationRepository, method store,
-        //  главное условие, не передавать request в метод репозитория
-        $publication = new Publication($request->validated());
-        $publication->save();
+        $publication = $this->publicationRepository->create($request->validated());
 
         $image = $this->imageService->store(
             $request->file('preview_image'),
@@ -64,6 +62,7 @@ class PublicationController extends Controller
 
         return redirect()->route('publication.index');
     }
+
     public function show(Publication $publication)
     {
         return view('publications.edit', [
