@@ -88,38 +88,14 @@ class PublicationController extends Controller
 
     public function liker(Publication $publication)
     {
-        $checkLike = Like::where([
-                ['user_id', Auth::user()->id],
-                ['publication_id', $publication->id]]
-        )->count();
-
-        $checkDislike = Dislike::where([
-                ['user_id', Auth::user()->id],
-                ['publication_id', $publication->id]]
-        )->delete();
-
-        if ($checkLike == null) {
-            $like = $this->publicationService->liker($publication, Auth::user()->id);
-        }
+        $like = $this->publicationService->liker($publication, Auth::user()->id);
 
         return redirect()->route('welcome');
     }
 
     public function disliker(Publication $publication)
     {
-        $check = Dislike::where([
-                ['user_id', Auth::user()->id],
-                ['publication_id', $publication->id]]
-        )->count();
-
-        $checkLike = Like::where([
-                ['user_id', Auth::user()->id],
-                ['publication_id', $publication->id]]
-        )->delete();
-
-        if ($check == null) {
-            $like = $this->publicationService->disliker($publication, Auth::user()->id);
-        }
+        $dislike = $this->publicationService->disliker($publication, Auth::user()->id);
 
         return redirect()->route('welcome');
     }
