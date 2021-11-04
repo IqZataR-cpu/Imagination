@@ -2,27 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentStoreRequest;
 use App\Models\Comment;
 use App\Models\Publication;
 use App\Models\User;
+use App\Repository\CommentRepository;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
-    public function create(Publication $publication, Request $request)
+    private $commentRepository;
+
+    public function __construct(CommentRepository $commentRepository)
     {
-        $user = \Auth::user();
+        $this->commentRepository = $commentRepository;
+    }
 
-        // fixme Создать Request класс на валидацию создания комментария, убрать отсюда проверку.
-        //  перенести логику создания в CommentRepository,
-        //  в качестве объекта к которому производится комментарий передавать Model $commentable
-        if (isset($request->body)) {
-            $comment = new Comment();
-            $comment->user_id = $user->id;
-            $comment->body = $request->body;
+    public function create(CommentStoreRequest $request)
+    {
+        $model = (new \ReflectionClass($request->commentable_type))->newInstance();
+        $model->id = $request->commentable_id;
 
-            $publication->comments()->save($comment);
-        }
+        $this->commentRepository->store(\Auth::user(), $request->validated(), $model);
+
+        return redirect()->route('welcome');
+    }
+
+    public function destroy(Comment $comment)
+    {
+        $comment->delete();
 
         return redirect()->route('welcome');
     }

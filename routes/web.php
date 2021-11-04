@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PublicationController::class, 'welcome'])->name('welcome');
 Route::get('/{publication}/like', [PublicationController::class, 'liker'])->name('liker');
 Route::get('/{publication}/dislike', [PublicationController::class, 'disliker'])->name('disliker');
-Route::post('{publication}/comment', [CommentController::class, 'create'])->name('comment.create');
+Route::post('/comment', [CommentController::class, 'create'])->name('comment.create');
+Route::get('{comment}/comment/destroy', [CommentController::class, 'destroy'])->name('comment.destroy');
 
 Route::group(['middleware' => 'auth', 'prefix' => 'personal'], function () {
     Route::post('/', [PublicationController::class, 'store'])->name('publication.store');

@@ -5,6 +5,12 @@ namespace App\Models;
 use App\Traits\HasComments;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Comment
+ * @package App\Models
+ * @property string user_id;
+ * @property string body;
+ */
 class Comment extends Model
 {
     use HasComments;

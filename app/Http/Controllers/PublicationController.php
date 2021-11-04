@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PublicationEditRequest;
 use App\Http\Requests\PublicationStoreRequest;
+use App\Models\Comment;
 use App\Models\Publication;
 use App\Repository\PublicationRepository;
 use App\Services\ImageService;

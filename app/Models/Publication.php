@@ -47,4 +47,14 @@ class Publication extends Model
             ->orderByDesc('created_at')
             ->limit(3)->get();
     }
+
+    public function childComments(array $data)
+    {
+        return Comment::where([
+            ['commentable_id', $data['commentable_id']],
+            ['commentable_type',  $data['commentable_type']]
+        ])
+            ->limit(4)
+            ->get();
+    }
 }

@@ -71,11 +71,13 @@
                 padding: 25px;
                 width: 488px;
             }
+
             .content-box-form {
                 width: 488px;
                 margin-bottom: 10px;
             }
-            .content-box-form form {
+
+            .content-box-form form{
                 display: inline-flex;
                 margin-left: 19px;
             }
@@ -164,18 +166,62 @@
                                 <b>Комментарии: {{ $publication->comments->count() }}<br></b>
                                 <div class="comments-box-comment">
                                     @foreach($publication->lastComments() as $comment)
-                                        {{$comment->author->name}}: {{ $comment->body }} <br>
+                                        <div>
+                                           <b>{{$comment->author->name}}:</b>  {{ $comment->body }} <br>
+
+                                            <div style="display: inline-flex">
+                                                <a id="comment-reply"> Ответить</a>
+                                                <a id="comment-back" style="display: none; margin-left: 5px;"> Скрыть </a>
+
+                                                @if(Auth::user()->name == optional($comment->author)->name)
+                                                    <a id="comment-delete" href="{{ route('comment.destroy', [$comment->id]) }}" style="margin-left: 5px;"> Удалить</a>
+                                                @endif
+                                            </div>
+
+                                            <div>
+                                                @if(Auth::user())
+                                                    <div id="form-reply"  style="display: none;"  >
+                                                        <form  action="{{ route('comment.create', ['commentable_id' => $comment->id, 'commentable_type' => get_class($comment)]) }}" method="POST">
+                                                            @csrf
+
+                                                            <textarea name="body" rows="5" cols="46" wrap="soft" style="resize: none" maxlength="1000" placeholder="Добавьте комментарий...."> </textarea>
+                                                            <div>
+                                                                <input type="submit" name="submit" value="Опубликовать">
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div>
+                                                    @foreach($publication->childComments(['commentable_id' => $comment->id, 'commentable_type' => 'App\Models\Comment']) as $childComment)
+                                                    <div style="margin-left: 25px">
+                                                        <b>{{ optional($childComment->author)->name }} </b> {{ $childComment->body }} <br>
+                                                    </div>
+
+                                                    @if(Auth::user())
+                                                            @if(Auth::user()->name == optional($childComment->author)->name)
+                                                                <a id="comment-delete" href="{{ route('comment.destroy', [$childComment->id]) }}" style="margin-left: 5px;"> Удалить</a>
+                                                            @endif
+                                                    @endif
+                                                    @endforeach
+                                            </div>
+                                        </div>
                                     @endforeach
                                 </div>
-
                             </div>
+                            @if(Auth::user())
                             <div class="content-box-form" >
-                                <form action="{{ route('comment.create', $publication) }}" method="POST">
+                                <form  action="{{ route('comment.create', ['commentable_id' => $publication->id, 'commentable_type' => get_class($publication)]) }}" method="POST">
                                     @csrf
-                                    <div><input type="text" name="body" placeholder="Добавьте комментарий...."></div>
-                                    <div><input type="submit" name="submit" value="Опубликовать"></div>
+
+                                    <textarea name="body" rows="5" cols="40" wrap="soft" style="resize: none" maxlength="1000" placeholder="Добавьте комментарий...."> </textarea>
+                                    <div>
+                                        <input type="submit" name="submit" value="Опубликовать">
+                                    </div>
                                 </form>
                             </div>
+                            @endif
                         </div>
                         <br>
                     </div>
@@ -188,21 +234,21 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
-{{--<script type="text/javascript">--}}
-{{--    $(function () {--}}
-{{--        $('#liker_disliker').submit(function (e) {--}}
-{{--            e.preventDefault();--}}
+<script type="text/javascript">
+    let formChildrenComment = document.getElementById('form-reply');
+    let replyComment = document.getElementById('comment-reply');
+    let backComment = document.getElementById('comment-back');
 
-{{--            var data = $(this).serialize();--}}
+    replyComment.addEventListener('click', formReply, false);
+    backComment.addEventListener('click', formNone, false);
 
-{{--            $.ajax({--}}
-{{--                type: "POST",--}}
-{{--                url: '/',--}}
-{{--                data: data,--}}
-{{--                success: function (result) {--}}
-{{--                    $('#like').html(result);--}}
-{{--                }--}}
-{{--            })--}}
-{{--        });--}}
-{{--    });--}}
-{{--</script>--}}
+    function formReply () {
+        formChildrenComment.style.display = "block";
+        backComment.style.display = "block";
+    }
+
+    function formNone () {
+        formChildrenComment.style.display = "none";
+        backComment.style.display = "none";
+    }
+</script>
