@@ -7,37 +7,37 @@ namespace App\Services;
 use App\Models\Dislike;
 use App\Models\Like;
 use App\Models\Publication;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class PublicationService
 {
-    public function liker(Publication $publication, $user_id): Like
+    public function like(Publication $publication, User $user): Like
     {
-        $dislike = Dislike::where([
-                ['user_id', Auth::user()->id],
+        Dislike::where([
+                ['user_id', $user->id],
                 ['publication_id', $publication->id]]
         )->delete();
 
         $like = new Like();
 
-        $like->publication_id = $publication->id;
-        $like->user_id = $user_id;
+        $like->publication()->associate($publication);
+        $like->user()->associate($user);
         $like->save();
 
         return $like;
     }
 
-    public function disliker(Publication $publication, $user_id): Dislike
+    public function dislike(Publication $publication, User $user): Dislike
     {
-        $like = Like::where([
-                ['user_id', Auth::user()->id],
+        Like::where([
+                ['user_id', $user->id],
                 ['publication_id', $publication->id]]
         )->delete();
 
         $dislike = new Dislike();
 
-        $dislike->publication_id = $publication->id;
-        $dislike->user_id = $user_id;
+        $dislike->publication()->associate($publication);
+        $dislike->user()->associate($user);
         $dislike->save();
 
         return $dislike;

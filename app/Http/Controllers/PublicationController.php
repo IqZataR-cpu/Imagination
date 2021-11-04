@@ -86,16 +86,16 @@ class PublicationController extends Controller
         return redirect()->route('publication.index');
     }
 
-    public function liker(Publication $publication)
+    public function like(Publication $publication)
     {
-        $like = $this->publicationService->liker($publication, Auth::user()->id);
+        $this->publicationService->like($publication, Auth::user());
 
         return redirect()->route('welcome');
     }
 
-    public function disliker(Publication $publication)
+    public function dislike(Publication $publication)
     {
-        $dislike = $this->publicationService->disliker($publication, Auth::user()->id);
+        $this->publicationService->dislike($publication, Auth::user());
 
         return redirect()->route('welcome');
     }
