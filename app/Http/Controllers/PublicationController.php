@@ -4,22 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PublicationEditRequest;
 use App\Http\Requests\PublicationStoreRequest;
-use App\Models\Comment;
 use App\Models\Publication;
 use App\Repository\PublicationRepository;
-use App\Services\ImageService;
 use App\Services\PublicationService;
 use Illuminate\Support\Facades\Auth;
 
 class PublicationController extends Controller
 {
-    private $imageService;
     private $publicationService;
     private $publicationRepository;
 
-    public function __construct(ImageService $imageService, PublicationService $publicationService, PublicationRepository $publicationRepository)
-    {
-        $this->imageService = $imageService;
+    public function __construct(
+        PublicationService $publicationService,
+        PublicationRepository $publicationRepository
+    ) {
         $this->publicationService = $publicationService;
         $this->publicationRepository = $publicationRepository;
     }
@@ -48,18 +46,7 @@ class PublicationController extends Controller
 
     public function store(PublicationStoreRequest $request)
     {
-        $publication = $this->publicationRepository->create($request->validated());
-
-        $image = $this->imageService->store(
-            $request->file('preview_image'),
-            $publication->id,
-            'publications'
-        );
-
-        $publication->previewImage()->associate($image);
-
-        $publication->author()->associate($request->user());
-        $publication->save();
+        $this->publicationRepository->create($request->user(), $request->validated());
 
         return redirect()->route('publication.index');
     }
@@ -73,8 +60,7 @@ class PublicationController extends Controller
 
     public function edit(Publication $publication, PublicationEditRequest $request)
     {
-        $publication->fill($request->validated());
-        $publication->save();
+        $publication->fill($request->validated())->save();
 
         return redirect()->route('publication.index');
     }
