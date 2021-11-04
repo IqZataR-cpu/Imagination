@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [PublicationController::class, 'welcome'])->name('welcome');
-Route::get('/{publication}/like', [PublicationController::class, 'liker'])->name('liker');
-Route::get('/{publication}/dislike', [PublicationController::class, 'disliker'])->name('disliker');
+Route::get('/{publication}/like', [PublicationController::class, 'like'])->name('liker');
+Route::get('/{publication}/dislike', [PublicationController::class, 'dislike'])->name('disliker');
 Route::post('/comment', [CommentController::class, 'create'])->name('comment.create');
 Route::get('{comment}/comment/destroy', [CommentController::class, 'destroy'])->name('comment.destroy');
 
