@@ -17,10 +17,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [PublicationController::class, 'welcome'])->name('welcome');
-Route::get('/{publication}/like', [PublicationController::class, 'like'])->name('liker');
-Route::get('/{publication}/dislike', [PublicationController::class, 'dislike'])->name('disliker');
-Route::post('/comment', [CommentController::class, 'create'])->name('comment.create');
-Route::get('{comment}/comment/destroy', [CommentController::class, 'destroy'])->name('comment.destroy');
 
 Route::group(['middleware' => 'auth', 'prefix' => 'personal'], function () {
     Route::post('/', [PublicationController::class, 'store'])->name('publication.store');
@@ -31,6 +27,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'personal'], function () {
     Route::get('/{publication}/destroy', [PublicationController::class, 'destroy'])->name('publication.destroy');
     Route::get('/area', [UserController::class, 'index'])->name('personal.index');
     Route::post('/area', [UserController::class, 'update'])->name('personal.edit');
+    Route::get('/{publication}/like', [PublicationController::class, 'like'])->name('liker');
+    Route::get('/{publication}/dislike', [PublicationController::class, 'dislike'])->name('disliker');
+    Route::post('/comment', [CommentController::class, 'create'])->name('comment.create');
+    Route::get('{comment}/comment/destroy', [CommentController::class, 'destroy'])->name('comment.destroy');
 });
 
 
