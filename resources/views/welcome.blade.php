@@ -170,17 +170,17 @@
                                            <b>{{$comment->author->name}}:</b>  {{ $comment->body }} <br>
 
                                             <div style="display: inline-flex">
-                                                <a id="comment-reply"> Ответить</a>
-                                                <a id="comment-back" style="display: none; margin-left: 5px;"> Скрыть </a>
+                                                <a class="comment-reply" data-form-reply="{{ $comment->id }}"> Ответить</a>
+                                                <a class="comment-back" data-back-button-id="{{ $comment->id }}" style="display: none; margin-left: 5px;"> Скрыть </a>
 
                                                 @if(Auth::user()->name == optional($comment->author)->name)
-                                                    <a id="comment-delete" href="{{ route('comment.destroy', [$comment->id]) }}" style="margin-left: 5px;"> Удалить</a>
+                                                    <a class="comment-delete" href="{{ route('comment.destroy', [$comment->id]) }}" style="margin-left: 5px;"> Удалить</a>
                                                 @endif
                                             </div>
 
                                             <div>
                                                 @if(Auth::user())
-                                                    <div id="form-reply"  style="display: none;"  >
+                                                    <div id="form-reply" data-form-id="{{ $comment->id }}" style="display: none;">
                                                         <form  action="{{ route('comment.create', ['commentable_id' => $comment->id, 'commentable_type' => get_class($comment)]) }}" method="POST">
                                                             @csrf
 
@@ -235,20 +235,24 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
 <script type="text/javascript">
-    let formChildrenComment = document.getElementById('form-reply');
-    let replyComment = document.getElementById('comment-reply');
-    let backComment = document.getElementById('comment-back');
+    let replyComments = document.querySelectorAll('.comment-reply');
+    let backComments = document.querySelectorAll('.comment-back');
 
-    replyComment.addEventListener('click', formReply, false);
-    backComment.addEventListener('click', formNone, false);
+    replyComments.forEach(form => {
+        form.addEventListener('click', formReply, false);
+    })
+
+    backComments.forEach(form => {
+        form.addEventListener('click', formNone, false);
+    })
 
     function formReply () {
-        formChildrenComment.style.display = "block";
-        backComment.style.display = "block";
+        document.querySelector(`[data-form-id='${event.currentTarget.dataset.formReply}']`).style.display = "block";
+        document.querySelector(`[data-back-button-id='${event.currentTarget.dataset.formReply}']`).style.display = "block";
     }
 
     function formNone () {
-        formChildrenComment.style.display = "none";
-        backComment.style.display = "none";
+        document.querySelector(`[data-form-id='${event.currentTarget.dataset.backButtonId}']`).style.display = "none";
+        event.currentTarget.style.display = "none";
     }
 </script>
