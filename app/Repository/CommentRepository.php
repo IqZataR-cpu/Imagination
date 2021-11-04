@@ -10,11 +10,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class CommentRepository
 {
-    public function store(User $user,array $data, Model $commentable)
+    public function store(User $user, array $data, Model $commentable)
     {
         $comment = new Comment($data);
 
-        $comment->user_id = $user->id;
+        $comment->author()->associate($user);
         $comment->fill($data);
 
         $commentable->comments()->save($comment);

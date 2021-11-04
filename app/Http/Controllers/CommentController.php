@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CommentStoreRequest;
 use App\Models\Comment;
-use App\Models\Publication;
-use App\Models\User;
 use App\Repository\CommentRepository;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Auth;
 
 class CommentController extends Controller
 {
@@ -24,7 +21,7 @@ class CommentController extends Controller
         $model = (new \ReflectionClass($request->commentable_type))->newInstance();
         $model->id = $request->commentable_id;
 
-        $this->commentRepository->store(\Auth::user(), $request->validated(), $model);
+        $this->commentRepository->store(Auth::user(), $request->validated(), $model);
 
         return redirect()->route('welcome');
     }
