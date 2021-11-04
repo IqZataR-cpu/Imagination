@@ -11,12 +11,16 @@ use App\Models\User;
 
 class PublicationService
 {
-    public function like(Publication $publication, User $user): Like
+    public function like(Publication $publication, User $user): ?Like
     {
         Dislike::where([
-                ['user_id', $user->id],
-                ['publication_id', $publication->id]]
+            ['user_id', $user->id],
+            ['publication_id', $publication->id]]
         )->delete();
+
+        if ($publication->hasLike($user)) {
+            return null;
+        }
 
         $like = new Like();
 
@@ -27,12 +31,16 @@ class PublicationService
         return $like;
     }
 
-    public function dislike(Publication $publication, User $user): Dislike
+    public function dislike(Publication $publication, User $user): ?Dislike
     {
         Like::where([
-                ['user_id', $user->id],
-                ['publication_id', $publication->id]]
+            ['user_id', $user->id],
+            ['publication_id', $publication->id]]
         )->delete();
+
+        if ($publication->hasDislike($user)) {
+            return null;
+        }
 
         $dislike = new Dislike();
 

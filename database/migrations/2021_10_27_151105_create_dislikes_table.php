@@ -14,6 +14,7 @@ class CreateDislikesTable extends Migration
     public function up()
     {
         Schema::create('dislikes', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('publication_id');
             $table->foreignId('user_id');
             $table->timestamps();

@@ -57,4 +57,14 @@ class Publication extends Model
             ->limit(4)
             ->get();
     }
+
+    public function hasLike(User $user)
+    {
+        return self::likes()->whereUserId($user->id)->exists();
+    }
+
+    public function hasDislike(User $user)
+    {
+        return self::dislikes()->whereUserId($user->id)->exists();
+    }
 }
